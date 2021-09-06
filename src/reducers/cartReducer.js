@@ -6,11 +6,12 @@ const initialState = {
     count: 0,
     id: 0,
     cartList: [],
+    deleted: false
 };
 const selectedCardList = []
 export const saveCardList = (item) => {
     selectedCardList.push(item);
-    console.log(selectedCardList)
+    //console.log(selectedCardList)
 }
 
 
@@ -19,7 +20,7 @@ export const getCartAsync = createAsyncThunk(
     async () => {
         const response = await axios.get("http://localhost:3000/cart/all");
         const data = await response.data;
-        console.log(data);
+        //console.log(data);
         return data;
     }
 )
@@ -27,8 +28,10 @@ export const getCartAsync = createAsyncThunk(
 export const deleteCartAsync = createAsyncThunk(
     'cart/deleteCart',
     async (id) => {
+        console.log(`Id passes to delele request : ${id}`);
         const response = await axios.delete(`http://localhost:3000/cart/carts/${id}`);
         const data = await response.data;
+        console.log(`Data deleted is : ${data.id}`)
         return data;
     }
 )
@@ -53,7 +56,7 @@ export const patchCartAsync = createAsyncThunk(
     'cart/patchCart',
     async (body) => {
 
-        const response = await axios.post(`http://localhost:3000/cart/carts/`, body);
+        const response = await axios.patch(`http://localhost:3000/cart/carts/${body.id}`, { count: body.count });
         const data = await response.data;
         return data;
     }
@@ -91,12 +94,17 @@ export const cartSlice = createSlice({
     reducers: {
         addToCart: (state, action) => {
             state.count = state.count + 1;
+            state.count = action
         },
         showCartCount: (state, action) => {
             action.payload(forEach(element => {
                 state.count += element;
             }))
         },
+        deleteCart: (state, action) => {
+            const newList = state.cartList.filter((item) => item.id !== action.payload.id);
+            state.cartList = newList;
+        }
         //addToCartByAmount: (state, action) => state.count + action.payload
     },
     extraReducers: {
@@ -112,13 +120,13 @@ export const cartSlice = createSlice({
         },
         [getCartAsync.fulfilled]: (state, action) => {
             let counter = 0;
-            let cartList = []
+            let cartLists = []
             action.payload.forEach(element => {
                 counter = counter + element.count;
-                cartList.push(element);
+                cartLists.push(element);
             });
-            state.cartList = cartList;
-            console.log(state.cartList)
+            state.cartList = cartLists;
+            //console.log(state.cartList)
             state.count = counter;
         },
         [getCartAsync.pending]: (state) => {
@@ -127,7 +135,15 @@ export const cartSlice = createSlice({
         [getCartAsync.rejected]: (state) => {
             console.log('Oh your request has been rejected! Try next time.');
         },
-        [patchCartAsync.fulfilled]: (state) => {
+        [patchCartAsync.fulfilled]: (state, action) => {
+            // let updatedCount = state.cartList.map(item => {
+            //     if (item.id === action.payload.id) {
+            //         return { ...state, count: action.payload.count + item.count }
+            //     }
+            //     return item;
+            // })
+            // state.cartList = updatedCount;
+            //state.count = state.count - action.payload.count;
             console.log("Data updated successfully")
         },
         [patchCartAsync.rejected]: (state) => {
@@ -145,7 +161,12 @@ export const cartSlice = createSlice({
         [getSingleCartAsync.rejected]: (state) => {
             console.log("Oh get by id request rejected.")
         },
-        [deleteCartAsync.fulfilled]: (state) => {
+        [deleteCartAsync.fulfilled]: (state, action) => {
+            const list = state.cartList.filter((item) => item.id !== action.payload.id);
+            state.cartList = list;
+            //console.log(`List after delete : ${state.cartList}`);
+            //state.deleted = true;
+            state.count = state.count - action.payload.count;
             console.log('Data deleted successfully')
         },
         [deleteCartAsync.pending]: (state) => {
@@ -158,5 +179,5 @@ export const cartSlice = createSlice({
     }
 });
 
-export const { addToCart, addToCartByAmount } = cartSlice.actions;
+export const { addToCart, addToCartByAmount, deleteCart } = cartSlice.actions;
 export default cartSlice.reducer;
