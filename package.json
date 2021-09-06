@@ -5,30 +5,60 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@reduxjs/toolkit": "^1.6.1",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@svgr/webpack": "5.5.0",
     "axios": "^0.21.1",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.0",
+    "babel-plugin-named-asset-import": "^0.3.7",
+    "babel-preset-react-app": "^10.0.0",
+    "bfj": "^7.0.2",
+    "camelcase": "^6.1.0",
+    "case-sensitive-paths-webpack-plugin": "2.3.0",
+    "css-loader": "^6.2.0",
+    "dotenv": "8.2.0",
+    "dotenv-expand": "5.1.0",
+    "eslint": "^7.11.0",
+    "file-loader": "6.1.1",
+    "fs-extra": "^9.0.1",
+    "identity-obj-proxy": "3.0.0",
+    "mini-css-extract-plugin": "0.11.3",
+    "optimize-css-assets-webpack-plugin": "5.0.4",
+    "pnp-webpack-plugin": "1.6.4",
+    "postcss-flexbugs-fixes": "4.2.1",
+    "postcss-loader": "3.0.0",
+    "postcss-normalize": "8.0.1",
+    "postcss-preset-env": "6.7.0",
+    "postcss-safe-parser": "5.0.2",
+    "prompts": "2.4.0",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
+    "react-app-polyfill": "^2.0.0",
+    "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
+    "react-refresh": "^0.8.3",
     "react-router": "^5.2.1",
-    "react-router-dom": "^5.2.1",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "react-router-dom": "^5.3.0",
+    "resolve": "1.18.1",
+    "resolve-url-loader": "^3.1.2",
+    "sass-loader": "^10.0.5",
+    "semantic-ui-react": "^2.0.3",
+    "semver": "7.3.2",
+    "style-loader": "^3.2.1",
+    "terser-webpack-plugin": "4.2.3",
+    "ts-pnp": "1.2.0",
+    "url-loader": "4.1.1",
+    "web-vitals": "^1.0.1",
+    "webpack": "^5.52.0",
+    "webpack-dev-server": "^4.1.0",
+    "webpack-manifest-plugin": "2.2.0",
+    "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start": "webpack serve --open",
+    "build": "webpack"
   },
   "browserslist": {
     "production": [
@@ -41,5 +71,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-react": "^7.14.5",
+    "@hot-loader/react-dom": "^17.0.1",
+    "babel-loader": "^8.2.2",
+    "html-webpack-plugin": "^5.3.2",
+    "react-hot-loader": "^4.13.0",
+    "webpack-cli": "^4.8.0"
   }
 }
