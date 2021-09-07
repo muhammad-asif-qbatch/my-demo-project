@@ -28,20 +28,21 @@ export default function MediaCard(props) {
         dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price }));
         dispatch(getCartAsync());
     }
+    const { name, description, price, image } = props;
     return (
         <Card className={classes.root}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image={props.image}
+                    image={image}
 
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {props.name}
+                        {name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {props.description}
+                        {description}
                     </Typography>
                 </CardContent>
             </CardActionArea>

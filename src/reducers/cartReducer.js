@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { forEach } from 'async';
-import axios from '../axios-config';
+import axios from '../axios-config.js';
 
 const initialState = {
     count: 0,
@@ -11,7 +11,6 @@ const initialState = {
 const selectedCardList = []
 export const saveCardList = (item) => {
     selectedCardList.push(item);
-    //console.log(selectedCardList)
 }
 
 
@@ -29,7 +28,7 @@ export const deleteCartAsync = createAsyncThunk(
     'cart/deleteCart',
     async (id) => {
         console.log(`Id passes to delele request : ${id}`);
-        const response = await axios.delete(`cart/carts/${id}`);
+        const response = await axios.delete(`/cart/carts/${id}`);
         const data = await response.data;
         console.log(`Data deleted is : ${data.id}`)
         return data;
@@ -42,7 +41,7 @@ export const postCartAsync = createAsyncThunk(
     async (body) => {
         try {
 
-            const response = await axios.post('cart/carts', body);
+            const response = await axios.post('/cart/carts', body);
             return response.data;
 
         }
@@ -56,7 +55,7 @@ export const patchCartAsync = createAsyncThunk(
     'cart/patchCart',
     async (body) => {
 
-        const response = await axios.patch(`cart/carts/${body.id}`, { count: body.count });
+        const response = await axios.patch(`/cart/carts/${body.id}`, { count: body.count });
         const data = await response.data;
         return data;
     }
@@ -81,7 +80,7 @@ export const patchCartAsync = createAsyncThunk(
 export const getSingleCartAsync = createAsyncThunk(
     'cart/getSingleCart',
     async (body) => {
-        const response = await axios.get(`cart/all`, { params: { id: body.id } });
+        const response = await axios.get(`/cart/all`, { params: { id: body.id } });
         // The value we return becomes the `fulfilled` action payload
         const data = await response.data;
         return data;
@@ -164,8 +163,6 @@ export const cartSlice = createSlice({
         [deleteCartAsync.fulfilled]: (state, action) => {
             const list = state.cartList.filter((item) => item.id !== action.payload.id);
             state.cartList = list;
-            //console.log(`List after delete : ${state.cartList}`);
-            //state.deleted = true;
             state.count = state.count - action.payload.count;
             console.log('Data deleted successfully')
         },
