@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { forEach } from 'async';
-import axios from 'axios';
+import axios from '../axios-config';
 
 const initialState = {
     count: 0,
@@ -18,7 +18,7 @@ export const saveCardList = (item) => {
 export const getCartAsync = createAsyncThunk(
     'cart/getCart',
     async () => {
-        const response = await axios.get("http://localhost:3000/cart/all");
+        const response = await axios.get("cart/all");
         const data = await response.data;
         //console.log(data);
         return data;
@@ -29,7 +29,7 @@ export const deleteCartAsync = createAsyncThunk(
     'cart/deleteCart',
     async (id) => {
         console.log(`Id passes to delele request : ${id}`);
-        const response = await axios.delete(`http://localhost:3000/cart/carts/${id}`);
+        const response = await axios.delete(`cart/carts/${id}`);
         const data = await response.data;
         console.log(`Data deleted is : ${data.id}`)
         return data;
@@ -42,7 +42,7 @@ export const postCartAsync = createAsyncThunk(
     async (body) => {
         try {
 
-            const response = await axios.post('http://localhost:3000/cart/carts', body);
+            const response = await axios.post('cart/carts', body);
             return response.data;
 
         }
@@ -56,7 +56,7 @@ export const patchCartAsync = createAsyncThunk(
     'cart/patchCart',
     async (body) => {
 
-        const response = await axios.patch(`http://localhost:3000/cart/carts/${body.id}`, { count: body.count });
+        const response = await axios.patch(`cart/carts/${body.id}`, { count: body.count });
         const data = await response.data;
         return data;
     }
@@ -81,7 +81,7 @@ export const patchCartAsync = createAsyncThunk(
 export const getSingleCartAsync = createAsyncThunk(
     'cart/getSingleCart',
     async (body) => {
-        const response = await axios.get(`http://localhost:3000/cart/all`, { params: { id: body.id } });
+        const response = await axios.get(`cart/all`, { params: { id: body.id } });
         // The value we return becomes the `fulfilled` action payload
         const data = await response.data;
         return data;

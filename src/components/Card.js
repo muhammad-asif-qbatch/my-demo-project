@@ -23,16 +23,10 @@ const useStyles = makeStyles({
 export default function MediaCard(props) {
     const classes = useStyles();
     const cartList = useSelector((state) => state.cart.cartList);
-    console.log(cartList);
     const dispatch = useDispatch();
     const add_to_cart = () => {
-        //dispatch(addToCart());
-        //console.log(cartList, "cart list")
-        //dispatch(getSingleCartAsync(props.id))
         dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price }));
         dispatch(getCartAsync());
-
-
     }
     return (
         <Card className={classes.root}>

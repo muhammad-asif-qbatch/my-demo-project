@@ -13,34 +13,45 @@ export default function Carts() {
     //     await dispatch(deleteCartAsync(id));
     //     //dispatch(getCartAsync());
     // }
+    const handleIncrement = (obj) => {
+        dispatch(patchCartAsync({ count: obj.count + 1, id: obj.id }));
+        dispatch(getCartAsync());
+    }
+    const handleDecrement = (obj) => {
+        dispatch(patchCartAsync({ count: obj.count - 1, id: obj.id }));
+        dispatch(getCartAsync());
+    }
+    const handleDelete = (id) => {
+        dispatch(deleteCartAsync(id))
+    }
     useEffect(() => {
         dispatch(getCartAsync())
-        //deleteFromCart();
     }, [count])
     return (
         <div style={{ display: 'flex' }}>
             {
                 cartsList && cartsList.map((elem, index) => {
+                    const { name, price, count, id } = elem;
                     return (
                         <Grid container spacing={3}>
                             <Grid item key={index}>
-                                <h3>Product Name: {elem.name}</h3>
-                                <h3>Product Price: {elem.price}</h3>
+                                <h3>Product Name: {name}</h3>
+                                <h3>Product Price: {price}</h3>
                                 <button onClick={() => {
-                                    dispatch(patchCartAsync({ count: elem.count + 1, id: elem.id }));
-                                    dispatch(getCartAsync());
+                                    const data = { count: count, id: id };
+                                    handleIncrement(data);
                                 }
                                 }>+</button>
                                 <input placeholder={elem.count} name={elem.id} />
                                 <button onClick={() => {
-                                    dispatch(patchCartAsync({ id: elem.id, count: elem.count - 1 }));
-                                    dispatch(getCartAsync());
+                                    const data = { count: elem.count, id: elem.id };
+                                    handleIncrement({ count: elem.count, id: elem.id });
 
                                 }}>-</button>
                                 <h3>Id: {elem.id}</h3>
 
                                 <button onClick={() => {
-                                    dispatch(deleteCartAsync(elem.id))
+                                    handleDelete(elem.id);
                                 }
                                 }>Remove from Cart</button>
 
