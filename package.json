@@ -24,6 +24,7 @@
     "fs-extra": "^9.0.1",
     "identity-obj-proxy": "3.0.0",
     "mini-css-extract-plugin": "0.11.3",
+    "npm": "^7.22.0",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
@@ -35,7 +36,7 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
-    "react-dev-utils": "^11.0.3",
+    "react-dev-utils": "^5.0.3",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "react-refresh": "^0.8.3",
@@ -71,7 +72,6 @@
       "last 1 safari version"
     ]
   },
-
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-class-properties": "^7.14.5",

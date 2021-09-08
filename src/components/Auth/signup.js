@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useDispatch } from 'react-redux';
+import { registerTheUser } from '../../reducers/userReducer';
+import { NavLink } from 'react-router-dom';
 
 function Copyright() {
     return (
@@ -48,7 +51,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
     const classes = useStyles();
-
+    const dispatch = useDispatch();
+    const handleUserRegistration = (firstName, lastName, email, password) => {
+        const userData = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password
+        }
+        dispatch(registerTheUser(userData));
+    }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -115,19 +127,22 @@ export default function SignUp() {
                         </Grid>
                     </Grid>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={() => {
+                            handleUserRegistration(document.getElementById("firstName").value, document.getElementById("lastName").value, document.getElementById('email').value, document.getElementById('password').value);
+                        }}
                     >
                         Sign Up
+
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link href="/signin" variant="body2">
+                            <NavLink to="/signin" variant="body2">
                                 Already have an account? Sign in
-                            </Link>
+                            </NavLink>
                         </Grid>
                     </Grid>
                 </form>

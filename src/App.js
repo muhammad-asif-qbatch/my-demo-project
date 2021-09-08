@@ -4,11 +4,11 @@ import Carts from './components/showCarts';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router';
 import SignUp from "./components/Auth/signup";
 import SignIn from "./components/Auth/signin";
 function App() {
-  const { count } = useSelector(state => state.cart);
-  console.log(count)
+  const loggedIn = useSelector(state => state.user.currentState);
   return (
     <div>
       <Router>
@@ -16,7 +16,7 @@ function App() {
         <br />
         <br />
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/products">
             <Products />
           </Route>
           <Route exact path="/carts">
@@ -26,7 +26,7 @@ function App() {
             <SignUp />
           </Route>
           <Route exact path="/signin">
-            <SignIn />
+            {loggedIn ? <Redirect to='/products' /> : <SignIn />}
           </Route>
         </Switch>
       </Router>

@@ -12,7 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { loginTheUser } from '../../reducers/userReducer';
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -49,6 +51,14 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+    const loginUser = (email, password) => {
+        const data = {
+            email: email,
+            password: password
+        }
+        dispatch(loginTheUser(data));
+    }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -87,7 +97,11 @@ export default function SignIn() {
                         label="Remember me"
                     />
                     <Button
-                        type="submit"
+                        onClick={() => {
+                            loginUser(document.getElementById("email").value, document.getElementById("password").value)
+                        }
+                        }
+
                         fullWidth
                         variant="contained"
                         color="primary"
@@ -102,9 +116,9 @@ export default function SignIn() {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="/signup" variant="body2">
+                            <NavLink to="/signup" variant="body2">
                                 {"Don't have an account? Sign Up"}
-                            </Link>
+                            </NavLink>
                         </Grid>
                     </Grid>
                 </form>
