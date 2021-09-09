@@ -70,7 +70,7 @@ const userSlice = createSlice({
             state.last_name = action.payload.last_name;
             state.email = action.payload.email;
             state.password = action.payload.password;
-            state.currenState = true;
+            state.currentState = true;
             state.token = action.payload.token;
         },
         [loginTheUser.rejected]: state => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,9 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { loginTheUser } from '../../reducers/userReducer';
+import Cookies from 'universal-cookie';
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -27,7 +28,6 @@ function Copyright() {
         </Typography>
     );
 }
-
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -50,15 +50,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
     const classes = useStyles();
-
     const dispatch = useDispatch();
-    const loginUser = (email, password) => {
+    const cookies = new Cookies();
+    const loginUser = async (email, password) => {
         const data = {
             email: email,
             password: password
         }
-        dispatch(loginTheUser(data));
-    }
+        const response = await dispatch(loginTheUser(data));
+        const { payload } = response || {};
+        const { token } = payload || {};
+        cookies.set('token', token, { path: '/' });
+    };
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />

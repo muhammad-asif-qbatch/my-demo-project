@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { postCartAsync, getSingleCartAsync, getCartAsync } from '../reducers/cartReducer';
+import Cookies from 'universal-cookie';
 
 
 const useStyles = makeStyles({
@@ -24,13 +25,14 @@ export default function MediaCard(props) {
     const classes = useStyles();
     const cartList = useSelector((state) => state.cart.cartList);
     const dispatch = useDispatch();
+    const cookies = new Cookies();
     const add_to_cart = () => {
-        dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price }));
+        dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price, user_id: cookies.get('guesttoken') }));
         dispatch(getCartAsync());
     }
     const { name, description, price, image } = props;
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} key={props.id}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}

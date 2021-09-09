@@ -35,7 +35,6 @@ export const deleteCartAsync = createAsyncThunk(
     }
 )
 
-// Async function for API Post call
 export const postCartAsync = createAsyncThunk(
     'cart/postCart',
     async (body) => {
@@ -80,7 +79,7 @@ export const patchCartAsync = createAsyncThunk(
 export const getSingleCartAsync = createAsyncThunk(
     'cart/getSingleCart',
     async (body) => {
-        const response = await axios.get(`/cart/all`, { params: { id: body.id } });
+        const response = await axios.get(`/cart/all`, { body });
         // The value we return becomes the `fulfilled` action payload
         const data = await response.data;
         return data;

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCartAsync, deleteCartAsync, deleteCart, patchCartAsync } from '../reducers/cartReducer'
+import { getSingleCartAsync, deleteCartAsync, deleteCart, patchCartAsync } from '../reducers/cartReducer';
+//import Cookies from 'coo'
 export default function Carts() {
 
     const cartsList = useSelector((state) => state.cart.cartList);
@@ -19,7 +20,8 @@ export default function Carts() {
         dispatch(deleteCartAsync(id))
     }
     useEffect(() => {
-        dispatch(getCartAsync())
+
+        dispatch(getSingleCartAsync())
     }, [count])
     return (
         <div style={{ display: 'flex' }}>

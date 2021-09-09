@@ -60,6 +60,7 @@ export default function SignUp() {
             password: password
         }
         dispatch(registerTheUser(userData));
+
     }
     return (
         <Container component="main" maxWidth="xs">
