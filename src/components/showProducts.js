@@ -3,22 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProductAsync } from '../reducers/productReducers';
 import Card from './Card';
 import Grid from '@material-ui/core/Grid';
-import { getCartAsync } from '../reducers/cartReducer';
-import { useCookies } from 'react-cookie';
+import { getUserSpecificCart } from '../reducers/cartReducer';
 import Cookies from 'universal-cookie';
 const Products = () => {
     const list = useSelector((state) => state.product.list);
     const count = useSelector((state) => state.cart.count);
     const cookies = new Cookies();
+    const token = cookies.get('guestToken');
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getProductAsync())
-        dispatch(getCartAsync());
-        if (!cookies.get('guesttoken')) {
-            const randomToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            cookies.set('guesttoken', randomToken, { path: '/' });
+        dispatch(getProductAsync());
+        if (token) {
+            dispatch(getUserSpecificCart(token));
         }
-    }, []);
+
+
+    }, [token]);
     return (
         <Grid container spacing={8}>
             {

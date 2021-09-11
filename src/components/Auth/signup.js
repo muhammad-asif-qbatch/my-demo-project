@@ -12,10 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector } from 'react-redux';
 import { registerTheUser } from '../../reducers/userReducer';
-import { NavLink } from 'react-router-dom';
-
+import { NavLink, useHistory } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -47,20 +47,30 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    errorText:{
+        color:'red'
+    }
 }));
 
 export default function SignUp() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const handleUserRegistration = (firstName, lastName, email, password) => {
+    const cookies = new Cookies();
+    const history = useHistory();
+    const {error} = useSelector(state => state.user);
+    const handleUserRegistration = async (firstName, lastName, email, password) => {
         const userData = {
             first_name: firstName,
             last_name: lastName,
             email: email,
             password: password
-        }
-        dispatch(registerTheUser(userData));
-
+        };
+        const response = await dispatch(registerTheUser(userData));
+        //console.log(response.meta.rejectedWithValue);
+        const { payload } = response || {};
+        const { token } = payload || {};
+        cookies.set('guestToken', token, { path: '/' });
+        //history.push('/signin');
     }
     return (
         <Container component="main" maxWidth="xs">
@@ -121,10 +131,7 @@ export default function SignUp() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
-                            />
+                            <h2 className={classes.errorText}>{error}</h2>
                         </Grid>
                     </Grid>
                     <Button

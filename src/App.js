@@ -8,6 +8,7 @@ import SignUp from "./components/Auth/signup";
 import SignIn from "./components/Auth/signin";
 function App() {
   let loggedIn = useSelector((state) => state.user.currentState);
+  console.log('LoggedIn: ', loggedIn)
   return (
     <div>
       <Router>
@@ -25,7 +26,7 @@ function App() {
             <SignUp />
           </Route>
           <Route exact path="/signin">
-            {loggedIn ? <Redirect to='/products' /> : <SignIn />}
+            {loggedIn ? <Redirect to='/' /> : <SignIn />}
           </Route>
         </Switch>
       </Router>

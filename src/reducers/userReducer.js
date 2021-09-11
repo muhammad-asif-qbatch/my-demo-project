@@ -8,20 +8,27 @@ const initialState = {
     password: '',
     currenState: false,
     token: '',
+    error: ''
 }
 
 
 
 export const registerTheUser = createAsyncThunk(
     'user/register',
-    async (body) => {
+    async (body, thunkApi) => {
         try {
             const response = await axios.post('/register', body);
             const data = response.data;
             return data;
         }
-        catch (e) {
-            console.log(e.message);
+        catch (error) {
+            if (error.response) {
+                return thunkApi.rejectWithValue({ error: error.response.data });
+            } else {
+                return thunkApi.rejectWithValue({
+                    error: error.message
+                })
+            }
         }
 
     }
@@ -29,13 +36,20 @@ export const registerTheUser = createAsyncThunk(
 
 export const loginTheUser = createAsyncThunk(
     'user/login',
-    async (body) => {
+    async (body, thunkApi) => {
         try {
             const response = await axios.post('/login', body);
             const data = response.data;
             return data;
         } catch (error) {
-            console.log(error.message);
+            if (error.response) {
+                return thunkApi.rejectWithValue({ error: error.response.data });
+            } else {
+                return thunkApi.rejectWithValue({
+                    error: error.message
+                })
+            }
+
         }
     }
 )
@@ -52,6 +66,9 @@ const userSlice = createSlice({
             state.last_name = action.payload.last_name;
             state.email = action.payload.email;
             state.password = action.payload.password;
+        },
+        updateLoggedInfo: (state) => {
+            state.currentState = false;
         }
     },
     extraReducers: {
@@ -59,7 +76,8 @@ const userSlice = createSlice({
 
             console.log(action.payload);
         },
-        [registerTheUser.rejected]: state => {
+        [registerTheUser.rejected]: (state, action) => {
+            state.error = action.payload.error;
             console.log('Rejected');
         },
         [registerTheUser.pending]: state => {
@@ -73,7 +91,8 @@ const userSlice = createSlice({
             state.currentState = true;
             state.token = action.payload.token;
         },
-        [loginTheUser.rejected]: state => {
+        [loginTheUser.rejected]: (state, action) => {
+            state.error = action.payload.error;
             console.log('Rejected');
         },
         [loginTheUser.pending]: state => {
@@ -81,5 +100,5 @@ const userSlice = createSlice({
         }
     }
 });
-
+export const { updateLoggedInfo } = userSlice.actions;
 export default userSlice.reducer;

@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { loginTheUser } from '../../reducers/userReducer';
 import Cookies from 'universal-cookie';
+import axios from '../../axios-config.js';
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -46,10 +48,14 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    h1:{
+        color: 'red'
+    }
 }));
 
 export default function SignIn() {
     const classes = useStyles();
+    const {error} = useSelector(state => state.user);
     const dispatch = useDispatch();
     const cookies = new Cookies();
     const loginUser = async (email, password) => {
@@ -60,7 +66,9 @@ export default function SignIn() {
         const response = await dispatch(loginTheUser(data));
         const { payload } = response || {};
         const { token } = payload || {};
-        cookies.set('token', token, { path: '/' });
+
+        cookies.set('guestToken', token, { path: '/' });
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     };
     return (
         <Container component="main" maxWidth="xs">
@@ -72,7 +80,7 @@ export default function SignIn() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -95,10 +103,8 @@ export default function SignIn() {
                         id="password"
                         autoComplete="current-password"
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
+                    <h1 className={classes.h1}>{error}</h1>
+
                     <Button
                         onClick={() => {
                             loginUser(document.getElementById("email").value, document.getElementById("password").value)

@@ -6,7 +6,7 @@ const initialState = {
     count: 0,
     id: 0,
     cartList: [],
-    deleted: false
+    deleted: false,
 };
 const selectedCardList = []
 export const saveCardList = (item) => {
@@ -23,26 +23,37 @@ export const getCartAsync = createAsyncThunk(
         return data;
     }
 )
-
 export const deleteCartAsync = createAsyncThunk(
     'cart/deleteCart',
-    async (id) => {
-        console.log(`Id passes to delele request : ${id}`);
-        const response = await axios.delete(`/cart/carts/${id}`);
+    async (body) => {
+        const response = await axios.delete(`/cart/carts/${body.id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${body.token}`
+            }
+        });
         const data = await response.data;
-        console.log(`Data deleted is : ${data.id}`)
         return data;
     }
 )
-
 export const postCartAsync = createAsyncThunk(
     'cart/postCart',
     async (body) => {
         try {
-
-            const response = await axios.post('/cart/carts', body);
+            const { id, count, name, price, token } = body;
+            const data = {
+                id,
+                count,
+                name,
+                price
+            }
+            const response = await axios.post('/cart/carts', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
-
         }
         catch (error) {
             console.log(error)
@@ -54,7 +65,11 @@ export const patchCartAsync = createAsyncThunk(
     'cart/patchCart',
     async (body) => {
 
-        const response = await axios.patch(`/cart/carts/${body.id}`, { count: body.count });
+        const response = await axios.patch(`/cart/carts/${body.id}`, { count: body.count }, {
+            headers: {
+                Authorization: `bearer ${body.token}` //the token is a variable which holds the token
+            }
+        });
         const data = await response.data;
         return data;
     }
@@ -76,11 +91,14 @@ export const patchCartAsync = createAsyncThunk(
 //     }
 // )
 
-export const getSingleCartAsync = createAsyncThunk(
-    'cart/getSingleCart',
-    async (body) => {
-        const response = await axios.get(`/cart/all`, { body });
-        // The value we return becomes the `fulfilled` action payload
+export const getUserSpecificCart = createAsyncThunk(
+    'cart/getUserCart/',
+    async (token) => {
+        const response = await axios.get('/cart/list', {
+            headers: {
+                Authorization: `bearer ${token}` //the token is a variable which holds the token
+            }
+        });
         const data = await response.data;
         return data;
     }
@@ -102,6 +120,9 @@ export const cartSlice = createSlice({
         deleteCart: (state, action) => {
             const newList = state.cartList.filter((item) => item.id !== action.payload.id);
             state.cartList = newList;
+        },
+        updateCartCount: (state, action) => {
+            state.count = 0;
         }
         //addToCartByAmount: (state, action) => state.count + action.payload
     },
@@ -150,18 +171,29 @@ export const cartSlice = createSlice({
         [patchCartAsync.pending]: (state) => {
             console.log("pending state, please wait for the response")
         },
-        [getSingleCartAsync.fulfilled]: (state, action) => {
-            state.preCount = action.payload.count;
+        [getUserSpecificCart.fulfilled]: (state, action) => {
+            let counter = 0;
+            let cartLists = []
+            action.payload.forEach(element => {
+                counter = counter + element.count;
+                cartLists.push(element);
+            });
+            state.cartList = cartLists;
+            console.log(state.cartList)
+            state.count = counter;
         },
-        [getSingleCartAsync.pending]: (state) => {
+        [getUserSpecificCart.pending]: (state) => {
             console.log("In pending state in getsingle fun")
         },
-        [getSingleCartAsync.rejected]: (state) => {
+        [getUserSpecificCart.rejected]: (state) => {
             console.log("Oh get by id request rejected.")
         },
         [deleteCartAsync.fulfilled]: (state, action) => {
-            const list = state.cartList.filter((item) => item.id !== action.payload.id);
+            //console.log(action.payload);
+            console.log('Cart list :', state.cartList);
+            const list = state.cartList.filter((item) => ((item.id !== action.payload.id) && (item.user_id !== action.payload.user_id)));
             state.cartList = list;
+            console.log(list)
             state.count = state.count - action.payload.count;
             console.log('Data deleted successfully')
         },
@@ -175,5 +207,5 @@ export const cartSlice = createSlice({
     }
 });
 
-export const { addToCart, addToCartByAmount, deleteCart } = cartSlice.actions;
+export const { addToCart, addToCartByAmount, deleteCart, updateCartCount } = cartSlice.actions;
 export default cartSlice.reducer;

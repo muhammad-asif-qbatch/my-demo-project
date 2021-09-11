@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { postCartAsync, getSingleCartAsync, getCartAsync } from '../reducers/cartReducer';
+import { postCartAsync, getUserSpecificCart } from '../reducers/cartReducer';
 import Cookies from 'universal-cookie';
 
 
@@ -26,9 +26,12 @@ export default function MediaCard(props) {
     const cartList = useSelector((state) => state.cart.cartList);
     const dispatch = useDispatch();
     const cookies = new Cookies();
+    const token = cookies.get('guestToken');
     const add_to_cart = () => {
-        dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price, user_id: cookies.get('guesttoken') }));
-        dispatch(getCartAsync());
+        if (token) {
+            dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price, token: token }));
+            dispatch(getUserSpecificCart(token))
+        }
     }
     const { name, description, price, image } = props;
     return (
