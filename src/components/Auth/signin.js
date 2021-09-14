@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
         color: 'red'
     }
 }));
-
 export default function SignIn() {
     const classes = useStyles();
     const { error } = useSelector(state => state.user);
@@ -107,13 +106,11 @@ export default function SignIn() {
                         autoComplete="current-password"
                     />
                     <h1 className={classes.h1}>{error}</h1>
-
                     <Button
                         onClick={() => {
                             loginUser(document.getElementById("email").value, document.getElementById("password").value)
                         }
                         }
-
                         fullWidth
                         variant="contained"
                         color="primary"

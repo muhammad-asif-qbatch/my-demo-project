@@ -19,7 +19,7 @@ const Auth = () => {
                 Have an account! Go on to Login
             </Link>
             <Switch>
-                <Route path={`auth/signup`} component={SignUp} />
+                <Route path={`/auth/signup`} component={SignUp} />
                 <Route path={`/auth/signin`} component={SignIn} />
 
             </Switch>

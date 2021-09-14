@@ -12,6 +12,7 @@ import { Route, Link, useRouteMatch } from 'react-router-dom';
 import { postCartAsync, getUserSpecificCart } from '../reducers/cartReducer';
 import Cookies from 'universal-cookie';
 import CardModal from './CardModal';
+import { getSpecificProduct } from '../reducers/productReducers';
 
 const useStyles = makeStyles({
     root: {
@@ -28,18 +29,24 @@ export default function MediaCard(props) {
     const dispatch = useDispatch();
     const cookies = new Cookies();
     const token = cookies.get('guestToken');
+    const { name, description, price, image, id } = props;
     const add_to_cart = () => {
         if (token) {
-            dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price, token: token }));
+            dispatch(postCartAsync({ id: id, count: 1, name: name, price: price, token: token }));
             dispatch(getUserSpecificCart(token));
         }
     }
-    const { name, description, price, image } = props;
+    const handleSpecificProduct = (id) => {
+        dispatch(getSpecificProduct(id));
+    }
+
     const { path, url } = useRouteMatch();
     return (
-        <Card className={classes.root} key={props.id}>
+        <Card className={classes.root} key={id}>
             <CardActionArea>
-                <Link to={`${url}/${props.id}`}>
+                <Link to={`${url}/modal/${props.id}`} onClick={() => {
+                    handleSpecificProduct(id);
+                }}>
                     <CardMedia
                         className={classes.media}
                         image={image}
@@ -56,7 +63,6 @@ export default function MediaCard(props) {
                 </Link>
             </CardActionArea>
             <CardActions>
-
                 <Button size="small" color="primary" onClick={() => { add_to_cart() }}>
                     Add to cart
                 </Button>
@@ -64,10 +70,9 @@ export default function MediaCard(props) {
                     Remove from Card
                 </Button>
             </CardActions>
-            <Route path={`${path}/:id`}>
+            <Route path={`${path}/modal/:id`}>
                 <CardModal />
             </Route>
-        </Card >
-
+        </Card>
     );
 }

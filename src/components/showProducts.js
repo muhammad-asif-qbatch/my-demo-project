@@ -16,11 +16,10 @@ const Products = () => {
         if (token) {
             dispatch(getUserSpecificCart(token));
         }
-
-
     }, [token]);
     //const { path, url } = useRouteMatch();
     return (
+        <div style={{width:'75%'}}>
         <Grid container spacing={8}>
             {
                 list && list.map((elem, index) => {
@@ -30,14 +29,12 @@ const Products = () => {
                                 <Card name={elem.name} description={elem.description} image={elem.image} price={elem.price} quantity={elem.quantity} count={count} id={elem.id} />
                         </Grid>
                     )
-
                 }
-
                 )
 
             }
-           
-        </Grid >
+            </Grid>
+        </div>
     )
 }
 export default Products

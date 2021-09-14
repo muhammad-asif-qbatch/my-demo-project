@@ -9,10 +9,7 @@ const initialState = {
     currenState: false,
     token: '',
     error: ''
-}
-
-
-
+};
 export const registerTheUser = createAsyncThunk(
     'user/register',
     async (body, thunkApi) => {
@@ -27,13 +24,11 @@ export const registerTheUser = createAsyncThunk(
             } else {
                 return thunkApi.rejectWithValue({
                     error: error.message
-                })
+                });
             }
         }
-
     }
 )
-
 export const loginTheUser = createAsyncThunk(
     'user/login',
     async (body, thunkApi) => {
@@ -47,16 +42,11 @@ export const loginTheUser = createAsyncThunk(
             } else {
                 return thunkApi.rejectWithValue({
                     error: error.message
-                })
+                });
             }
-
         }
     }
 )
-
-
-
-
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -73,7 +63,6 @@ const userSlice = createSlice({
     },
     extraReducers: {
         [registerTheUser.fulfilled]: (state, action) => {
-
             console.log(action.payload);
         },
         [registerTheUser.rejected]: (state, action) => {

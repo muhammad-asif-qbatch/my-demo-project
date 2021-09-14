@@ -1,18 +1,34 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from '../axios-config';
-const initialState = { list: [] };
-
-
+const initialState = { 
+    list: [],
+    productDescription: " "
+};
 export const getProductAsync = createAsyncThunk(
     'product/getProduct',
     async () => {
-        const response = await axios.get("product/products");
-        // The value we return becomes the `fulfilled` action payload
-        const data = await response.data;
-        return data;
+        try{
+            const response = await axios.get("product/products");
+            const data = await response.data;
+            return data;
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 );
-
+export const getSpecificProduct = createAsyncThunk(
+    'product/getSpecificProduct',
+    async (id) => {
+        try{
+            const response = await axios.get(`product/products/${id}`);
+            return  response.data;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+);
 export const productSlice = createSlice({
     name: 'product',
     initialState,
@@ -22,12 +38,19 @@ export const productSlice = createSlice({
             state.list = action.payload;
         },
         [getProductAsync.pending]: (state) => {
-            console.log('pending')
-            state = "pending"
+            console.log('pending');
         },
         [getProductAsync.rejected]: (state) => {
-            console.log('rejected')
-            state = "rejected"
+            console.log('rejected');
+        },
+        [getSpecificProduct.fulfilled]: (state, action) => {
+            state.productDescription = action.payload[0].description;
+        },
+        [getSpecificProduct.rejected]: (state, action) => {
+            console.log(action.payload)
+        },
+        [getSpecificProduct.pending]: (state, action) => {
+            console.log(action.payload)
         }
     },
 });

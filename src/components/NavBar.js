@@ -13,7 +13,6 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateLoggedInfo } from '../reducers/userReducer';
-import { updateCartCount } from '../reducers/cartReducer';
 import Cookies from 'universal-cookie';
 const useStyles = makeStyles((theme) => ({
     root: {
