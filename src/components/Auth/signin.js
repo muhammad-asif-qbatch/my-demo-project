@@ -13,10 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { loginTheUser } from '../../reducers/userReducer';
 import Cookies from 'universal-cookie';
 import axios from '../../axios-config.js';
+
 
 function Copyright() {
     return (
@@ -48,15 +49,16 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-    h1:{
+    h1: {
         color: 'red'
     }
 }));
 
 export default function SignIn() {
     const classes = useStyles();
-    const {error} = useSelector(state => state.user);
+    const { error } = useSelector(state => state.user);
     const dispatch = useDispatch();
+    const history = useHistory();
     const cookies = new Cookies();
     const loginUser = async (email, password) => {
         const data = {
@@ -68,6 +70,7 @@ export default function SignIn() {
         const { token } = payload || {};
 
         cookies.set('guestToken', token, { path: '/' });
+        history.push('/products');
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     };
     return (

@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useDispatch , useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerTheUser } from '../../reducers/userReducer';
 import { NavLink, useHistory } from 'react-router-dom';
 import Cookies from 'universal-cookie';
@@ -47,17 +47,18 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-    errorText:{
-        color:'red'
+    errorText: {
+        color: 'red'
     }
 }));
 
 export default function SignUp() {
+    console.log('I am in SignUp')
     const classes = useStyles();
     const dispatch = useDispatch();
     const cookies = new Cookies();
     const history = useHistory();
-    const {error} = useSelector(state => state.user);
+    const { error } = useSelector(state => state.user);
     const handleUserRegistration = async (firstName, lastName, email, password) => {
         const userData = {
             first_name: firstName,

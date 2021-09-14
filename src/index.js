@@ -5,8 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { CookiesProvider } from "react-cookie";
+import { HashRouter } from 'react-router-dom';
 import store from './store'
 ReactDOM.render(
+
   <CookiesProvider>
     <Provider store={store}>
       <App />

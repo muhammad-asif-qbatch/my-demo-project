@@ -19,19 +19,25 @@ const Products = () => {
 
 
     }, [token]);
+    //const { path, url } = useRouteMatch();
     return (
         <Grid container spacing={8}>
             {
                 list && list.map((elem, index) => {
                     return (
+
                         <Grid item xs={3} key={index}>
-                            <Card name={elem.name} description={elem.description} image={elem.image} price={elem.price} quantity={elem.quantity} count={count} id={elem.id} />
+                                <Card name={elem.name} description={elem.description} image={elem.image} price={elem.price} quantity={elem.quantity} count={count} id={elem.id} />
                         </Grid>
                     )
+
                 }
+
                 )
+
             }
-        </Grid>
+           
+        </Grid >
     )
 }
 export default Products

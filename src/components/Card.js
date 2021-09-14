@@ -8,9 +8,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Route, Link, useRouteMatch } from 'react-router-dom';
 import { postCartAsync, getUserSpecificCart } from '../reducers/cartReducer';
 import Cookies from 'universal-cookie';
-
+import CardModal from './CardModal';
 
 const useStyles = makeStyles({
     root: {
@@ -30,26 +31,29 @@ export default function MediaCard(props) {
     const add_to_cart = () => {
         if (token) {
             dispatch(postCartAsync({ id: props.id, count: 1, name: props.name, price: props.price, token: token }));
-            dispatch(getUserSpecificCart(token))
+            dispatch(getUserSpecificCart(token));
         }
     }
     const { name, description, price, image } = props;
+    const { path, url } = useRouteMatch();
     return (
         <Card className={classes.root} key={props.id}>
             <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={image}
+                <Link to={`${url}/${props.id}`}>
+                    <CardMedia
+                        className={classes.media}
+                        image={image}
 
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {description}
-                    </Typography>
-                </CardContent>
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {description}
+                        </Typography>
+                    </CardContent>
+                </Link>
             </CardActionArea>
             <CardActions>
 
@@ -60,6 +64,10 @@ export default function MediaCard(props) {
                     Remove from Card
                 </Button>
             </CardActions>
-        </Card>
+            <Route path={`${path}/:id`}>
+                <CardModal />
+            </Route>
+        </Card >
+
     );
 }
