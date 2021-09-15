@@ -6,7 +6,7 @@ const initialState = {
 };
 export const getProductAsync = createAsyncThunk(
     'product/getProduct',
-    async () => {
+    async (thunkApi) => {
         try{
             const response = await axios.get("product/products");
             const data = await response.data;
@@ -14,18 +14,24 @@ export const getProductAsync = createAsyncThunk(
         }
         catch(error){
             console.log(error);
+            return thunkApi.rejectWithValue({
+                error: error.message
+            });
         }
     }
 );
 export const getSpecificProduct = createAsyncThunk(
     'product/getSpecificProduct',
-    async (id) => {
+    async (id, thunkApi) => {
         try{
             const response = await axios.get(`product/products/${id}`);
             return  response.data;
         }
         catch(error){
             console.log(error);
+            return thunkApi.rejectWithValue({
+                error: error.message
+            });
         }
     }
 );

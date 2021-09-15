@@ -17,9 +17,6 @@ function App() {
         <br />
         <br />
         <Switch>
-          {/* <Route path="/auth">
-            <Auth />
-          </Route> */}
           <Route path="/products">
             <Products />
           </Route>

@@ -27,7 +27,7 @@ export const getCartAsync = createAsyncThunk(
 )
 export const deleteCartAsync = createAsyncThunk(
     'cart/deleteCart',
-    async (body) => {
+    async (body, thunkApi) => {
         try{
             const response = await axios.delete(`/cart/carts/${body.id}`, {
                 headers: {
@@ -40,12 +40,15 @@ export const deleteCartAsync = createAsyncThunk(
         }
         catch(error){
             console.log(error);
+            return thunkApi.rejectWithValue({
+                error: error.message
+            });
         }
     }
 )
 export const postCartAsync = createAsyncThunk(
     'cart/postCart',
-    async (body) => {
+    async (body, thunkApi) => {
         try {
             const { id, count, name, price, token } = body;
             const data = {
@@ -63,14 +66,17 @@ export const postCartAsync = createAsyncThunk(
             return response.data;
         }
         catch (error) {
-            console.log(error)
+            console.log(error);
+            return thunkApi.rejectWithValue({
+                error: error.message
+            });
         }
     }
 );
 
 export const patchCartAsync = createAsyncThunk(
     'cart/patchCart',
-    async (body) => {
+    async (body, thunkApi) => {
         try{
             const response = await axios.patch(`/cart/carts/${body.id}`, { count: body.count }, {
                 headers: {
@@ -82,6 +88,9 @@ export const patchCartAsync = createAsyncThunk(
         }
         catch(error){
             console.log(error);
+            return thunkApi.rejectWithValue({
+                error: error.message
+            });
         }
     }
 );
@@ -104,7 +113,7 @@ export const patchCartAsync = createAsyncThunk(
 
 export const getUserSpecificCart = createAsyncThunk(
     'cart/getUserCart/',
-    async (token) => {
+    async (token, thunkApi) => {
         try{
             const response = await axios.get('/cart/list', {
                 headers: {
@@ -116,6 +125,9 @@ export const getUserSpecificCart = createAsyncThunk(
         }
         catch(error){
             console.log(error);
+            return thunkApi.rejectWithValue({
+                error: error.message
+            });
         }
     }
 )
